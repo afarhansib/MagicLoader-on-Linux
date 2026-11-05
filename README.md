@@ -63,7 +63,7 @@ so nothing gets shaded and the log keeps saying `camera: searching...` and `atla
 
 `magic-early-inject.sh` injects about a second after the game process appears:
 
-1. In BOL, turn **auto-inject off** for `magic_windows.dll`. Other DLLs can stay.
+1. In BOL, turn **auto-inject off**. The script injects your client DLLs too (see below).
 2. If you have never used BOL's "Inject DLL", run it once so BOL unpacks `cache/injector.exe`.
 3. Every time you play:
 
@@ -75,8 +75,30 @@ so nothing gets shaded and the log keeps saying `camera: searching...` and `atla
 
 4. In a world, open the MagicLoader overlay and pick a pack.
 
-The script finds BOL's folders the way BOL does. Override them with `BOL_HOME`, `BOL_PREFIX`,
-`BOL_ENGINE`, or `MAGIC_DLL` if yours differ. It writes to `BOL/logs/early-inject.log`.
+### With a client DLL
+
+Pass client DLLs (their Linux paths) as arguments:
+
+```bash
+./magic-early-inject.sh ~/clients/client.dll
+```
+
+MagicLoader still goes in right at the start. The clients wait for the main menu, which the script
+detects the same way BOL's auto-inject does, and go in 3 seconds after it appears. That matches
+injecting them by hand with BOL's "Inject DLL" from the menu.
+
+### Settings
+
+The script finds BOL's folders the way BOL does. You can override these with environment variables:
+
+| Variable | Default |
+| --- | --- |
+| `BOL_HOME`, `BOL_PREFIX`, `BOL_ENGINE` | BOL's own folders |
+| `MAGIC_DLL` | `C:\users\steamuser\AppData\Local\Programs\MagicLoader\magic_windows.dll` |
+| `MAGIC_DELAY` | `1` (seconds after the game starts before MagicLoader is injected) |
+| `CLIENT_DELAY` | `3` (seconds after the main menu before the clients are injected) |
+
+It writes to `BOL/logs/early-inject.log`.
 
 ## Troubleshooting
 
